@@ -85,7 +85,8 @@ class TorchVisionEmbeddingAdapter(ImageEmbeddingAdapter):
             raise
         except ImportError as exc:
             raise UnsupportedBackendError(
-                "Install the retrieval extra: uv sync --extra retrieval"
+                "Install the retrieval extra; see README installation instructions "
+                "(from a source checkout: python -m pip install -e '.[retrieval]')"
             ) from exc
 
     def preprocess(self, inputs: Any) -> Any:

@@ -14,7 +14,8 @@ def build_app(config: AppConfig) -> Any:
         import gradio as gr
     except ImportError as exc:
         raise RuntimeError(
-            "Install the demo extra, for example: uv sync --extra detection"
+            "Install a demo extra; see README installation instructions "
+            "(from a source checkout: python -m pip install -e '.[detection]')"
         ) from exc
     service = DemoService(config)
     atexit.register(service.close)

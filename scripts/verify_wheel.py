@@ -3,6 +3,7 @@
 import json
 import os
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -13,7 +14,7 @@ with tempfile.TemporaryDirectory(prefix="aidemo-wheel-") as temporary:
     environment = os.environ.copy()
     environment.pop("PYTHONPATH", None)
     subprocess.run(
-        ["uv", "venv", "--seed", "--python", "3.11", str(directory / "venv")],
+        [sys.executable, "-m", "venv", str(directory / "venv")],
         env=environment,
         check=True,
     )
@@ -28,8 +29,10 @@ with tempfile.TemporaryDirectory(prefix="aidemo-wheel-") as temporary:
 from pathlib import Path
 import ai_demo_starter
 from importlib.resources import files
+from importlib.util import find_spec
 from ai_demo_starter.config.loader import default_config
 assert '/site-packages/' in ai_demo_starter.__file__
+assert all(find_spec(name) is None for name in ('torch', 'gradio', 'faster_whisper'))
 for task in ('detection', 'speech', 'retrieval'):
     resource = files('ai_demo_starter').joinpath('configs', task + '.yaml')
     assert resource.is_file()
@@ -53,6 +56,7 @@ print('Installed wheel imports and all packaged templates: passed')
                 "installer": "python -m pip install",
                 "cwd_outside_repository": True,
                 "imports_and_templates": "passed",
+                "optional_backends_absent": True,
                 "cli_help_version_list": "passed",
             },
             indent=2,

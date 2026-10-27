@@ -111,7 +111,8 @@ class TorchVisionDetectionAdapter(DetectionAdapter):
             raise
         except ImportError as exc:
             raise UnsupportedBackendError(
-                "Install the detection extra: uv sync --extra detection"
+                "Install the detection extra; see README installation instructions "
+                "(from a source checkout: python -m pip install -e '.[detection]')"
             ) from exc
 
     def preprocess(self, inputs: Any) -> tuple[Image.Image, Any, float]:

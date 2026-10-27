@@ -4,12 +4,18 @@ Native execution was verified on NixOS 26.05 x86_64 with CPython 3.11.16. This i
 
 ```bash
 nix-shell
-uv sync --locked --all-extras
-uv run aidemo list
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install torch==2.14.1+cpu torchvision==0.29.1+cpu --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -e ".[all]"
+aidemo list
 ```
 
 The supplied `shell.nix` provides Python 3.11, uv, FFmpeg, and an LD_LIBRARY_PATH containing the compiler C++ runtime and zlib. Without it, manylinux NumPy/Torch/CTranslate2 imports can fail with `libstdc++.so.6` missing. Enter this shell before invoking Python from `.venv`, including for installed-wheel verification. No `/usr/bin` dependency is assumed by the library.
 
-The shell uses the host's `<nixpkgs>` and is not a pinned Nix flake; the Python dependency graph is locked, but the entire native system environment is not. The tested uv is 0.11.21. Other NixOS releases, architectures, GPU drivers, and Python ABIs remain unverified. If native wheels are incompatible on another host, a Linux container is an alternative; the provided Docker image could not be built/run in this session because no daemon is available.
+uv is included as an optional tool. To use the locked environment instead of pip, run `uv sync --locked --all-extras` after entering `nix-shell`, then activate `.venv` or use `uv run aidemo list`. The same native-library requirements apply to a Conda environment.
+
+The shell uses the host's `<nixpkgs>` and is not a pinned Nix flake. `uv.lock` records the tested Python dependency graph; pip resolves supported ranges independently. The entire native system environment is not pinned. The tested uv is 0.11.21. Other NixOS releases, architectures, GPU drivers, and Python ABIs remain unverified. If native wheels are incompatible on another host, a Linux container is an alternative; the provided Docker image could not be built/run in this session because no daemon is available.
 
 A restricted agent sandbox may prohibit socket creation and appear to cause DNS failures. That is separate from Nix native library compatibility. In this verification environment the Nix shell execution context had working DNS/TLS and loopback sockets. Do not change host DNS or proxy settings to work around an execution-policy restriction.

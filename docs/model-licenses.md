@@ -49,7 +49,7 @@ Publishing this toolkit's original MIT source is distinct from redistributing pr
 
 ## Acquisition and cache
 
-Use `uv run aidemo models prepare --config configs/<task>.yaml`. Torch checkpoints live in `<cache>/checkpoints`; cached bytes are rehashed before safe `weights_only=True` loading. Whisper stores snapshots below `<cache>/hub` and an atomic `speech-<identifier>.json` pointer to the resolved commit. Subsequent execution is local-only. Deleting the cache requires explicit preparation again. The default cache is `~/.cache/ai-demo-starter`; `AIDEMO_CACHE_DIR` overrides it.
+Use `aidemo models prepare --config configs/<task>.yaml`. Torch checkpoints live in `<cache>/checkpoints`; cached bytes are rehashed before safe `weights_only=True` loading. Whisper stores snapshots below `<cache>/hub` and an atomic `speech-<identifier>.json` pointer to the resolved commit. Subsequent execution is local-only. Deleting the cache requires explicit preparation again. The default cache is `~/.cache/ai-demo-starter`; `AIDEMO_CACHE_DIR` overrides it.
 
 No unreviewed model-code execution or arbitrary checkpoint import is offered. Review weight/data rights before redistribution or commercial/public deployment. Legal review beyond documenting published provenance and unknowns was not performed.
 

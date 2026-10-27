@@ -13,16 +13,17 @@ Proposed GitHub release notes. This release has not been published. Use after th
 
 ## Getting started
 
-From a source checkout with Python 3.11 and uv installed (enter `nix-shell` first on NixOS):
+From a source checkout with an activated Python 3.11 environment (enter `nix-shell` first on NixOS), install the Linux CPU dependencies and toolkit with pip:
 
 ```bash
-uv sync --locked --all-extras
-uv run aidemo list
-uv run aidemo models prepare --config configs/detection.yaml
-uv run aidemo run detection
+python -m pip install torch==2.14.1+cpu torchvision==0.29.1+cpu --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -e ".[all]"
+aidemo list
+aidemo models prepare --config configs/detection.yaml
+aidemo run detection
 ```
 
-Preparation explicitly accesses upstream model sources; ordinary inference is offline by default. See the README for speech, retrieval galleries, and custom configurations.
+Preparation explicitly accesses upstream model sources; ordinary inference is offline by default. See the README for pip/venv, Conda, and optional uv environment setup, speech, retrieval galleries, and custom configurations.
 
 ## Verification and compatibility
 

@@ -125,7 +125,8 @@ class FasterWhisperAdapter(SpeechRecognitionAdapter):
             raise
         except ImportError as exc:
             raise UnsupportedBackendError(
-                "Install the speech extra: uv sync --extra speech"
+                "Install the speech extra; see README installation instructions "
+                "(from a source checkout: python -m pip install -e '.[speech]')"
             ) from exc
 
     def preprocess(self, inputs: Any) -> tuple[int, np.ndarray, float]:

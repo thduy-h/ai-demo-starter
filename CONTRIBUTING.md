@@ -1,6 +1,6 @@
 # Contributing
 
-Use Python 3.11 and uv 0.11.21. On NixOS enter `nix-shell` first. Install with `uv sync --locked --all-extras`, then run `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy src`, and `uv run pytest -v`. Keep core tests offline and put real weights behind the opt-in flags described in [testing](docs/testing.md).
+Use Python 3.11 and an isolated environment. On NixOS enter `nix-shell` first. Follow the [README installation instructions](README.md#install) for pip, Conda, or uv, then install developer tools with `python -m pip install -e ".[dev]" build`. Run `ruff check .`, `ruff format --check .`, `mypy src`, and `python -m pytest -v`. Alternatively, `uv sync --locked --all-extras` with uv 0.11.21 reproduces the tested dependency graph. Keep core tests offline and put real weights behind the opt-in flags described in [testing](docs/testing.md).
 
 Preserve task-specific public types, Gradio-independent adapters, explicit model acquisition, and safe input/index handling. Add tests that establish contracts or reproduce real defects. Do not commit weights, cache directories, user uploads, credentials, or generated gallery indexes. The three synthetic example images and attributed small test fixtures are intentional assets.
 

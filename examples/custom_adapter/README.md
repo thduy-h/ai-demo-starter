@@ -5,9 +5,9 @@
 Use a retrieval-enabled installation and enter `nix-shell` first on NixOS. Run from the repository root:
 
 ```bash
-uv run python examples/custom_adapter/app.py models prepare --config examples/custom_adapter/config.yaml
-uv run python examples/custom_adapter/app.py gallery build --config examples/custom_adapter/config.yaml --input examples/gallery --output .local/galleries/custom
-uv run python examples/custom_adapter/app.py run retrieval --config examples/custom_adapter/config.yaml
+python examples/custom_adapter/app.py models prepare --config examples/custom_adapter/config.yaml
+python examples/custom_adapter/app.py gallery build --config examples/custom_adapter/config.yaml --input examples/gallery --output .local/galleries/custom
+python examples/custom_adapter/app.py run retrieval --config examples/custom_adapter/config.yaml
 ```
 
 The example explicitly calls `register_adapter("mobilenet_prefix", PrefixEmbeddingAdapter)` before invoking the stock Typer CLI. Its YAML selects that name. The existing Gradio retrieval UI and service are unchanged. Ordinary `aidemo` processes do not see this process-local registration; launch through the example application.

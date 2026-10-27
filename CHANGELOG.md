@@ -2,6 +2,8 @@
 
 ## 0.1.0
 
+Installation documentation now covers pip/venv, Conda environments, and optional uv, with explicit Linux CPU wheel selection and shared `aidemo` commands. Clean-wheel verification uses standard-library venv and pip without requiring uv. Conda environment creation remains unverified.
+
 Initial CPU-first release candidate: typed configuration, lifecycle-managed TorchVision detection and embeddings, local faster-whisper speech recognition, Gradio UIs, atomic gallery persistence, explicit weight acquisition, CLI, adapter extension example, packaging, and deployment guidance.
 
 Stabilization: generated and verified uv lock with CPU wheel sources; fixed Typer options and editable config resources; selected versioned weight enums and immutable Whisper commit; verified Torch checkpoint SHA256 and safe loading; corrected inference timing, integer audio scaling/resampling, upload bounds, gallery compatibility/path checks, and bounded artifact cleanup. Added deterministic tests, real CPU inference/live HTTP checks, clean-wheel verification, and tested native NixOS shell guidance. See [release audit](docs/release.md) for the conditional verdict and unverified deployment items.

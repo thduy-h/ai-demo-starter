@@ -2,15 +2,18 @@
 
 ## Native Linux and pip
 
-Use Python 3.11 and `uv sync --locked --extra detection` (or speech/retrieval/all-extras). Native testing used NixOS with the supplied [shell](nixos.md); ordinary Ubuntu CI is configured but has not run remotely in this session. Keep models in a persistent cache and prepare explicitly before serving. All demos default to localhost:7860 and offline inference.
+Use Python 3.11 and an activated venv or Conda environment. Follow the [README](../README.md#install) for source installation with pip, Conda, or uv. Neither the installed library nor the CLI requires uv. Native testing used NixOS with the supplied [shell](nixos.md); ordinary Ubuntu CI is configured but has not run remotely in this session. Keep models in a persistent cache and prepare explicitly before serving. All demos default to localhost:7860 and offline inference.
 
-Both source and wheel distributions build with `uv build`. Test a base wheel installation in an isolated environment with `uv run python scripts/verify_wheel.py`; it uses pip and runs outside the source tree. Config templates are packaged. A wheel consumer can select an extra:
+Build both distributions using `python -m pip install build` followed by `python -m build`, or use `uv build`. Run `python scripts/verify_wheel.py` to test a base wheel installation in a fresh standard-library venv using pip, outside the source tree. Config templates are packaged. A Linux CPU wheel consumer can select an extra after installing the tested framework pair:
 
 ```bash
+python -m pip install torch==2.14.1+cpu torchvision==0.29.1+cpu --index-url https://download.pytorch.org/whl/cpu
 python -m pip install 'dist/ai_demo_starter-0.1.0-py3-none-any.whl[detection]'
 ```
 
-Pip does not read uv's source/index settings. To select CPU Torch on Linux, install compatible Torch/TorchVision CPU wheels first from `https://download.pytorch.org/whl/cpu` (the tested pair is 2.14.1+cpu/0.29.1+cpu). Otherwise pip may choose substantially larger framework distributions. The locked uv workflow is preferred for reproducing this audit.
+pip does not read uv's source/index settings. Use the CPU index only for Torch/TorchVision, not for all dependencies. For speech alone, omit the framework installation and select `[speech]`. A wheel installation provides packaged default configs: use `aidemo run detection` without a repository checkout. For editable YAML files, copy templates from the source repository and pass `--config` explicitly.
+
+The uv lockfile records the exact tested dependency graph; pip resolves the supported ranges in package metadata and may choose newer versions. Conda is an environment-manager option: install this project and its model runtimes with pip inside that environment rather than mixing pip Torch with Conda Torch packages. Conda environment creation was not executed in the verification environment because Conda was unavailable.
 
 Use `AIDEMO_CACHE_DIR`, `AIDEMO_HOST`, and `AIDEMO_PORT` for operational overrides. Uploads and model execution stay local. Public exposure needs an external authentication/access/abuse-control layer; do not enable a Gradio sharing link by accident. Model runtimes and decoded images consume considerably more memory than weight file sizes; no RSS or capacity benchmark has been measured. Keep concurrency at one initially.
 
