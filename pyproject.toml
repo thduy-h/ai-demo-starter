@@ -1,0 +1,89 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ai-demo-starter"
+version = "0.1.0"
+description = "CPU-first reusable AI demos and model adapter toolkit"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "AI Demo Starter contributors"}]
+keywords = ["gradio", "object-detection", "speech-recognition", "image-retrieval", "cpu"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "numpy>=1.26,<3",
+  "pydantic>=2.7,<3",
+  "PyYAML>=6.0,<7",
+  "typer>=0.12,<1",
+  "rich>=13.7,<15",
+  "Pillow>=10.0,<13",
+]
+
+[project.urls]
+Homepage = "https://github.com/thduy-h/ai-demo-starter"
+Documentation = "https://github.com/thduy-h/ai-demo-starter#readme"
+Issues = "https://github.com/thduy-h/ai-demo-starter/issues"
+
+[project.optional-dependencies]
+ui = ["gradio>=5.0,<6"]
+detection = ["torch>=2.6,<3", "torchvision>=0.21,<1", "gradio>=5.0,<6"]
+retrieval = ["torch>=2.6,<3", "torchvision>=0.21,<1", "gradio>=5.0,<6"]
+speech = ["faster-whisper>=1.1,<2", "soundfile>=0.12,<1", "scipy>=1.11,<2", "gradio>=5.0,<6", "huggingface-hub>=0.23,<2"]
+all = [
+  "gradio>=5.0,<6", "torch>=2.6,<3", "torchvision>=0.21,<1",
+  "faster-whisper>=1.1,<2", "soundfile>=0.12,<1", "scipy>=1.11,<2", "huggingface-hub>=0.23,<2",
+]
+dev = ["pytest>=8,<10", "pytest-cov>=5,<8", "ruff>=0.6,<1", "mypy>=1.11,<2", "types-PyYAML>=6,<7"]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{index = "pytorch-cpu", marker = "sys_platform == 'linux'"}]
+torchvision = [{index = "pytorch-cpu", marker = "sys_platform == 'linux'"}]
+
+[project.scripts]
+aidemo = "ai_demo_starter.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ai_demo_starter"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "configs", "tests", "examples", "scripts", "docs", "uv.lock", "README.md", "LICENSE", "CHANGELOG.md", "CONTRIBUTING.md", "shell.nix", "Dockerfile", "docker-compose.yml", ".gitignore", ".dockerignore", ".python-version", ".github"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [".venv", ".local", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["real_model: requires explicitly prepared weights", "ui_live: local HTTP Gradio smoke"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = false
+warn_unused_ignores = true
+check_untyped_defs = true
+exclude = "tests"
+
+[[tool.mypy.overrides]]
+module = ["torch", "torch.*", "torchvision", "torchvision.*", "faster_whisper", "scipy.*", "soundfile", "gradio", "huggingface_hub"]
+# Optional third-party backends do not consistently ship typing metadata.
+ignore_missing_imports = true

@@ -1,0 +1,14 @@
+schema_version: 1
+demo: {type: speech, title: "Speech Recognition Demo"}
+model:
+  adapter: faster_whisper
+  identifier: tiny
+  backend: faster-whisper
+  device: cpu
+  revision: d90ca5fe260221311c53c58e660288d3deb8d356
+  compute_type: int8
+  beam_size: 5
+downloads: {allow_download: false}
+inference: {max_audio_seconds: 300, max_concurrency: 1}
+input: {max_upload_mb: 25, allowed_formats: [wav, flac]}
+server: {host: "127.0.0.1", port: 7860, share: false}

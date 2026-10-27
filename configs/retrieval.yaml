@@ -1,0 +1,12 @@
+schema_version: 1
+demo: {type: retrieval, title: "Image Retrieval Demo"}
+model:
+  adapter: torchvision_embedding
+  identifier: mobilenet_v3_small
+  backend: pytorch
+  device: cpu
+  revision: MobileNet_V3_Small_Weights.IMAGENET1K_V1
+downloads: {allow_download: false}
+gallery_dir: ../.local/galleries/example
+input: {max_upload_mb: 10, allowed_formats: [jpeg, png, webp]}
+server: {host: "127.0.0.1", port: 7860, share: false}
